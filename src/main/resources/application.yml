@@ -9,3 +9,10 @@ server:
 spring:
   message:
     basename: messages
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        ## 원래 보안상 전체 다 개방하는것은 좋지 않음 "health,beans" 처럼 사용하기
