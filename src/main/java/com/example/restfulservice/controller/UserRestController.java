@@ -3,7 +3,10 @@ package com.example.restfulservice.controller;
 import com.example.restfulservice.bean.User;
 import com.example.restfulservice.dao.UserDaoService;
 import com.example.restfulservice.exception.UserNotFoundException;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UserRestController {
@@ -26,14 +32,18 @@ public class UserRestController {
     }
 
     @GetMapping("/users/{id}")
-    public User retriveUser(@PathVariable int id){
+    public EntityModel<User> retriveUser(@PathVariable int id){
         User user = userDaoService.findOne(id);
 
         if(user == null){
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
 
-        return user;
+        EntityModel<User> model = EntityModel.of(user);
+
+        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+        model.add(linkTo.withRel("all-users")); // all-users -> http://localhost:8088/users
+        return model;
     }
 
     // 적절한 메서드, 적절한 반환값,적절한 상태코드
