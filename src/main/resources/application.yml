@@ -13,6 +13,19 @@ spring:
 #    user:
 #      name: username
 #      password: pass1234
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    defer-datasource-initialization: true # 초기설정 스크립트 파일이 있을 경우 hibernate초기화 이후 바로 작동하도록 설정
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
 
 management:
   endpoints:

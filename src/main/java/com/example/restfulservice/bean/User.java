@@ -3,19 +3,27 @@ package com.example.restfulservice.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @JsonIgnoreProperties(value = {"password","ssn"})
 @Schema(description = "사용자 상세 정보를 위한 도메인 객체")
+@Entity
+@NoArgsConstructor
+@Table(name = "Users")
 public class User {
+    @Id
+    @GeneratedValue
     @Schema(title="사용자 아이디", description = "사용자 ID는 자동 생성됩니다")
     private Integer id;
 
@@ -34,4 +42,15 @@ public class User {
     @Schema(title = "사용자 주민번호")
 //    @JsonIgnore
     private String ssn;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
+
+    public User(Integer id, String name, Date joinDate, String password, String ssn) {
+        this.id = id;
+        this.name = name;
+        this.joinDate = joinDate;
+        this.password = password;
+        this.ssn = ssn;
+    }
 }
