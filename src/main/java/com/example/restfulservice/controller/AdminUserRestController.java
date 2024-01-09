@@ -29,7 +29,9 @@ public class AdminUserRestController {
         this.userDaoService = userDaoService;
     }
 
-    @GetMapping("/v1/users/{id}")
+//    @GetMapping(value = "/users/{id}",params = "version=1")
+//    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1")
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appv1+json")
     public MappingJacksonValue retriveUser4Admin(@PathVariable int id){
         User user = userDaoService.findOne(id);
 
@@ -50,7 +52,9 @@ public class AdminUserRestController {
     }
 
 
-    @GetMapping("/v2/users/{id}")
+//    @GetMapping(value = "/users/{id}",params = "version=2")
+//    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2")
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appv2+json")
     public MappingJacksonValue retriveUser4AdminV2(@PathVariable int id){
         User user = userDaoService.findOne(id);
 
